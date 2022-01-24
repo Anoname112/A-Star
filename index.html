@@ -398,7 +398,7 @@
 				if (eX >= canvasPadding && eX < canvasPadding + mapWidth * squareSize && eY >= canvasPadding && eY < canvasPadding + mapHeight * squareSize) {
 					var indexX = parseInt((eX - canvasPadding) / squareSize);
 					var indexY = parseInt((eY - canvasPadding) / squareSize);
-					console.log(indexY);
+					
 					if (map[indexX][indexY] == 0) {
 						map[endPoint.X][endPoint.Y] = 0;
 						map[indexX][indexY] = 3;
