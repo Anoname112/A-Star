@@ -1,2 +1,2 @@
 # A-Star
-https://cancerino.github.io/A-Star/
+https://anoname112.github.io/A-Star/
