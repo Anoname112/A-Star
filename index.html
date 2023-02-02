@@ -15,6 +15,7 @@
 				bottom: 0;
 				left: 0;
 				right: 0;
+				width: 100%; height: 100%;
 			}
 		</style>
 		<script>
@@ -83,15 +84,20 @@
 			
 			var mapWidth = map.length;
 			var mapHeight = map[0].length;
-			var squareSize = 18;
-			var canvasPadding = 25;
-			var buttonWidth = 60;
-			var buttonHeight = 30;
-			var buttonPadding = 5;
-			var lineHeight = 14;
+			
+			var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+			var isPortrait = window.innerWidth < window.innerHeight;
+			
+			var fill = isPortrait ? window.innerWidth : window.innerHeight;
+			var canvasPadding = isMobile ? 15 : 20;
+			var squareSize = (fill - (2 * canvasPadding)) / map.length;
+			var buttonWidth = isMobile ? 57 : 60;
+			var buttonHeight = isMobile ? 22 : 32;
+			var buttonPadding = isMobile ? 6 : 6;
+			var lineHeight = isMobile ? 9 : 15;
 			var canvasFont = '14px Segoe UI';
 			var fontColor = '#000';
-			var buttonColor = '#22f';
+			var buttonColor = '#44f';
 			var exploredColor = '#800';
 			var opensetColor = '#cc2';
 			var finalPathColor = '#22c';
@@ -304,6 +310,12 @@
 				// Draw instant button
 				var x = canvasPadding * 2 + mapWidth * squareSize;
 				var y = canvasPadding;
+				if (isPortrait) {
+					var temp = x;
+					x = y;
+					y = temp;
+				}
+				
 				ctx.font = canvasFont;
 				if (instant) {
 					ctx.fillStyle = buttonColor;
@@ -390,6 +402,11 @@
 				// Instant button
 				var instantX = canvasPadding * 2 + mapWidth * squareSize;
 				var instantY = canvasPadding;
+				if (isPortrait) {
+					var temp = instantX;
+					instantX = instantY;
+					instantY = temp;
+				}
 				if (eX >= instantX && eX < instantX + buttonWidth && eY >= instantY && eY < instantY + buttonHeight) {
 					instant = !instant;
 					reset();
