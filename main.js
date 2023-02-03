@@ -226,7 +226,7 @@ function draw () {
 	y += squareSize * 2;
 	ctx.fillStyle = endColor;
 	ctx.fillRect(x, y, squareSize, squareSize);
-	ctx.fillText('End square (click to change the end square)', x + squareSize * 2, y + lineHeight);
+	ctx.fillText('End square (click a square to change)', x + squareSize * 2, y + lineHeight);
 	
 	y += squareSize * 2;
 	ctx.fillStyle = wallColor;
