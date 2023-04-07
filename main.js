@@ -1,5 +1,8 @@
-var c;
+var canvas;
 var ctx;
+
+var intervalId;
+var instant = false;
 
 var startPoint;
 var endPoint;
@@ -8,8 +11,78 @@ var explored;
 var openset;
 var finalPath;
 
-var intervalId;
-var instant = false;
+window.onload = function () {
+	document.onclick = onMouseClick;
+	
+	canvas = document.getElementById("myCanvas");
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	ctx = canvas.getContext("2d");
+	
+	reset();
+}
+
+function onMouseClick (e) {
+	var eX = e.clientX;
+	var eY = e.clientY;
+	
+	// Instant button
+	var instantX = canvasPadding * 2 + mapWidth * squareSize;
+	var instantY = canvasPadding;
+	if (isPortrait) {
+		var temp = instantX;
+		instantX = instantY;
+		instantY = temp;
+	}
+	if (eX >= instantX && eX < instantX + buttonWidth && eY >= instantY && eY < instantY + buttonHeight) {
+		instant = !instant;
+		reset();
+	}
+	
+	// End point
+	if (eX >= canvasPadding && eX < canvasPadding + mapWidth * squareSize && eY >= canvasPadding && eY < canvasPadding + mapHeight * squareSize) {
+		var indexX = parseInt((eX - canvasPadding) / squareSize);
+		var indexY = parseInt((eY - canvasPadding) / squareSize);
+		
+		if (map[indexX][indexY] == 0) {
+			map[endPoint.X][endPoint.Y] = 0;
+			map[indexX][indexY] = 3;
+			reset();
+		}
+	}
+}
+
+function reset () {
+	startPoint = null;
+	endPoint = null;
+	paths = [];
+	explored = [];
+	openset = [];
+	finalPath = null;
+	
+	for (var i = 0; i < map.length; i++) {
+		for (var j = 0; j < map[i].length; j++) {
+			if (map[i][j] == 2) startPoint = new Point(i, j);
+			if (map[i][j] == 3) endPoint = new Point(i, j);
+		}
+	}
+	
+	// Initiate start point and openset
+	paths.push(new Path([startPoint]));
+	explored.push(startPoint);
+	var neighbours = getNeighbours(startPoint);
+	for (var i = 0; i < neighbours.length; i++) {
+		if (!isExplored(neighbours[i]) && !inOpenset(neighbours[i]) && map[neighbours[i].X][neighbours[i].Y] != 1) {
+			openset.push(neighbours[i]);
+		}
+	}
+	
+	if (instant) {
+		while (finalPath == null && paths.length > 0) expand();
+		draw();
+	}
+	else intervalId  = setInterval(timerTick, timerInterval);
+}
 
 function getNeighbours (point) {
 	var neighbours = [];
@@ -139,7 +212,8 @@ function expand () {
 }
 
 function draw () {
-	c.width = c.width;
+	// Invalidate
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	
 	// Begin drawing
 	ctx.beginPath();
@@ -254,78 +328,4 @@ function draw () {
 function timerTick () {
 	if (finalPath == null && paths.length > 0) expand();
 	draw();
-}
-
-function reset () {
-	startPoint = null;
-	endPoint = null;
-	paths = [];
-	explored = [];
-	openset = [];
-	finalPath = null;
-	
-	for (var i = 0; i < map.length; i++) {
-		for (var j = 0; j < map[i].length; j++) {
-			if (map[i][j] == 2) startPoint = new Point(i, j);
-			if (map[i][j] == 3) endPoint = new Point(i, j);
-		}
-	}
-	
-	// Initiate start point and openset
-	paths.push(new Path([startPoint]));
-	explored.push(startPoint);
-	var neighbours = getNeighbours(startPoint);
-	for (var i = 0; i < neighbours.length; i++) {
-		if (!isExplored(neighbours[i]) && !inOpenset(neighbours[i]) && map[neighbours[i].X][neighbours[i].Y] != 1) {
-			openset.push(neighbours[i]);
-		}
-	}
-	
-	if (instant) {
-		while (finalPath == null && paths.length > 0) expand();
-		draw();
-	}
-	else intervalId  = setInterval(timerTick, timerInterval);
-}
-
-function onMouseClick (e) {
-	var eX = e.clientX;
-	var eY = e.clientY;
-	
-	// Instant button
-	var instantX = canvasPadding * 2 + mapWidth * squareSize;
-	var instantY = canvasPadding;
-	if (isPortrait) {
-		var temp = instantX;
-		instantX = instantY;
-		instantY = temp;
-	}
-	if (eX >= instantX && eX < instantX + buttonWidth && eY >= instantY && eY < instantY + buttonHeight) {
-		instant = !instant;
-		reset();
-	}
-	
-	// End point
-	if (eX >= canvasPadding && eX < canvasPadding + mapWidth * squareSize && eY >= canvasPadding && eY < canvasPadding + mapHeight * squareSize) {
-		var indexX = parseInt((eX - canvasPadding) / squareSize);
-		var indexY = parseInt((eY - canvasPadding) / squareSize);
-		
-		if (map[indexX][indexY] == 0) {
-			map[endPoint.X][endPoint.Y] = 0;
-			map[indexX][indexY] = 3;
-			reset();
-		}
-	}
-}
-
-window.onload = function () {
-	c = document.getElementById("myCanvas");
-	ctx = c.getContext("2d");
-	
-	c.width = window.innerWidth;
-	c.height = window.innerHeight;
-	
-	document.onclick = onMouseClick;
-	
-	reset();
 }

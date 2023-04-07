@@ -1,3 +1,6 @@
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const isPortrait = window.innerWidth < window.innerHeight;
+
 const mip = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -46,22 +49,19 @@ const map = [[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 
              [0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1],
              [2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1]];
 
+const timerInterval = 10;
 const mapWidth = map.length;
 const mapHeight = map[0].length;
-
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-const isPortrait = window.innerWidth < window.innerHeight;
-
 const fill = isPortrait ? window.innerWidth : window.innerHeight;
 const canvasPadding = isMobile ? 15 : 20;
+const canvasFont = '14px Segoe UI';
 const squareSize = (fill - (2 * canvasPadding)) / map.length;
+const fontColor = '#000000';
+const buttonColor = '#4444FF';
 const buttonWidth = isMobile ? 57 : 60;
 const buttonHeight = isMobile ? 22 : 32;
 const buttonPadding = isMobile ? 6 : 6;
 const lineHeight = isMobile ? 9 : 15;
-const canvasFont = '14px Segoe UI';
-const fontColor = '#000000';
-const buttonColor = '#4444FF';
 const exploredColor = '#880000';
 const opensetColor = '#CCCC22';
 const finalPathColor = '#2222CC';
@@ -69,5 +69,3 @@ const wallColor = '#000000';
 const startColor = '#22CC22';
 const endColor = '#FF2222';
 const drawGrid = true;
-
-const timerInterval = 10;
