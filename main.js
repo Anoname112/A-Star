@@ -14,10 +14,14 @@ var finalPath;
 window.onload = function () {
 	document.onclick = onMouseClick;
 	
-	canvas = document.getElementById("myCanvas");
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	ctx = canvas.getContext("2d");
+	const ratio = window.devicePixelRatio;
+	canvas = document.getElementById('myCanvas');
+	canvas.width = window.innerWidth * ratio;
+	canvas.height = window.innerHeight * ratio;
+	canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    canvas.getContext('2d').scale(ratio, ratio);
+	ctx = canvas.getContext('2d');
 	
 	reset();
 }
